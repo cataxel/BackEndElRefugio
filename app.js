@@ -12,6 +12,7 @@ var ventasRouter = require('./routes/ventas');
 var lotesRouter = require('./routes/lotes');
 var laboratoriosRouter = require('./routes/laboratorios');
 var proveedoresRouter = require('./routes/proveedores');
+var medicamentosRouter = require('./routes/Medicamentos');
 
 var app = express();
 
@@ -30,5 +31,6 @@ app.use('/ventas',ventasRouter);
 app.use('/lotes',lotesRouter);
 app.use('/laboratorios',laboratoriosRouter);
 app.use('/proveedor',proveedoresRouter);
+app.use('/medicamentos',medicamentosRouter);
 
 module.exports = app;
