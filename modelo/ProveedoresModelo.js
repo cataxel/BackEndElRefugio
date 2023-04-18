@@ -1,9 +1,6 @@
+const { boolean } = require('joi');
 var mongoose = require('mongoose');
 const ProveedoresSchema = mongoose.Schema({
-    _id:{
-        type: String,
-        default: () => nanoid(),
-    },
     nombreProveedores:{
         type: String,
         require: true,
@@ -24,8 +21,12 @@ const ProveedoresSchema = mongoose.Schema({
     },
     DireccionProveedores:{
         type:String,
+    },
+    Estatus:{
+        type: Boolean,
+        default: true
     }
 });
-const Proveedores = mongoose.model('Proveedores', ProveedoresSchema);
+const Proveedor = mongoose.model('Proveedores', ProveedoresSchema);
 
-module.export = Proveedores;
+module.exports = Proveedor;

@@ -1,9 +1,5 @@
 var mongoose = require('mongoose');
 const empleadoSchema = mongoose.Schema({
-    _id:{
-        type: String,
-        default: () => nanoid(),
-    },
     nombreEmpleado:{
         type: String,
         require: true,
@@ -25,9 +21,14 @@ const empleadoSchema = mongoose.Schema({
         type: String,
     },
     AntiguedadEmpleado:{
-        type:String,
+        type:Date,
+        default: Date.now
+    },
+    Estatus:{
+        type: Boolean,
+        default: true
     }
 });
 const Empleado = mongoose.model('Empleados', empleadoSchema);
 
-module.export = Empleado;
+module.exports = Empleado;

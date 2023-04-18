@@ -4,25 +4,14 @@ const controlador = require('../controlador/usuarioControlador.js');
 
 // empleados
 /* GET users listing. */
-router.get('/', function (req, res, next) {
-  // obtener todos los usuarios
-  res.send('principal empleados');
-});
+router.get('/', controlador.Usuario);
 // buscar usuario por id
-router.get('/:usuarioid', (req, res, next) => {
-
-})
+router.post('/:id',controlador.BuscarUsuarioId);
 // añadir usuario
-router.get('/añadir', function (req, res, next) {
-
-});
-router.post('/añadir', controlador.BuscarUsuarioId);
+router.post('/nuevo', controlador.CrearUsuario);
 // actualizar usuario
-router.post('/actualizar/:usuarioid', controlador.ActualizarUsuario);
+router.put('/actualizar/:id', controlador.ActualizarUsuario);
 // desactivar los usuarios
-router.get('/desactivar/:usuarioid', (req, res, next) => {
-
-});
-router.post('/desactivar/:usuarioid', controlador.DesactivarUsuario);
+router.put('/desactivar/:id', controlador.DesactivarUsuario);
 
 module.exports = router;
