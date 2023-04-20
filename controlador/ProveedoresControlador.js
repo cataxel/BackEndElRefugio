@@ -4,12 +4,12 @@ const Joi = require('joi');
 const NuevoProveedor = async function (req, res, next) {
     try {
         const Schema = Joi.object({
-            nombreProveedor: Joi.string().required(),
-            telefonoProveedor: Joi.string().required(),
-            LocalidadProveedor: Joi.string(),
-            EstadoProveedor: Joi.string(),
-            CPProveedor: Joi.string(),
-            DireccionProveedor: Joi.string(),
+            nombreProveedores: Joi.string().required(),
+            telefonoProveedores: Joi.string().required(),
+            LocalidadProveedores: Joi.string(),
+            EstadoProveedores: Joi.string(),
+            CPProveedores: Joi.string(),
+            DireccionProveedores: Joi.string(),
             Estatus: Joi.boolean()
         });
         const { error, value } = Schema.validate(req.body);
@@ -17,15 +17,15 @@ const NuevoProveedor = async function (req, res, next) {
             return res.status(400).json({ message: error.details[0].message });
         }
         const { 
-            nombreProveedor,
-            telefonoProveedor,
-            LocalidadProveedor,
-            EstadoProveedor,
-            CPProveedor,
-            DireccionProveedor,
+            nombreProveedores,
+            telefonoProveedores,
+            LocalidadProveedores,
+            EstadoProveedores,
+            CPProveedores,
+            DireccionProveedores,
             Estatus
         } = value;
-        const newProveedor = new Proveedor({nombreProveedor,telefonoProveedor,LocalidadProveedor,EstadoProveedor,CPProveedor,DireccionProveedor,Estatus});
+        const newProveedor = new Proveedor({nombreProveedores,telefonoProveedores,LocalidadProveedores,EstadoProveedores,CPProveedores,DireccionProveedores,Estatus});
         const guardado = await newProveedor.save();
         res.status(201).json(guardado);
     } catch (error) {
@@ -40,36 +40,36 @@ const NuevoProveedor = async function (req, res, next) {
 const ModificarProveedor = async function (req, res, next) {
     try {
         const Schema = Joi.object({
-            nombreProveedor: Joi.string().required(),
-            telefonoProveedor: Joi.string().required(),
-            LocalidadProveedor: Joi.string(),
-            EstadoProveedor: Joi.string(),
-            CPProveedor: Joi.string(),
-            DireccionProveedor: Joi.string(),
+            nombreProveedores: Joi.string().required(),
+            telefonoProveedores: Joi.string().required(),
+            LocalidadProveedores: Joi.string(),
+            EstadoProveedores: Joi.string(),
+            CPProveedores: Joi.string(),
+            DireccionProveedores: Joi.string(),
             Estatus: Joi.boolean()
         });
         const { error, value } = Schema.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
         }
-        const { nombreProveedor,
-            telefonoProveedor,
-            LocalidadProveedor,
-            EstadoProveedor,
-            CPProveedor,
-            DireccionProveedor,
+        const { nombreProveedores,
+            telefonoProveedores,
+            LocalidadProveedores,
+            EstadoProveedores,
+            CPProveedores,
+            DireccionProveedores,
             Estatus
         } = value;
         const proveedorId = req.params.id;
         const proveedor = await Proveedor.findOneAndUpdate(
             { _id: proveedorId },
             {
-                nombreProveedor,
-                telefonoProveedor,
-                LocalidadProveedor,
-                EstadoProveedor,
-                CPProveedor,
-                DireccionProveedor,
+                nombreProveedores,
+                telefonoProveedores,
+                LocalidadProveedores,
+                EstadoProveedores,
+                CPProveedores,
+                DireccionProveedores,
                 Estatus
             },
             { new: true, runValidators: true }
@@ -95,7 +95,7 @@ const DesactivarProveedor = async function (req, res, next) {
         }
         const {
             Estatus
-        } = value.Estatus;
+        } = value;
         const proveedorId = req.params.id;
         const proveedor = await Proveedor.findOneAndUpdate(
             { _id: proveedorId },
@@ -116,7 +116,7 @@ const DesactivarProveedor = async function (req, res, next) {
 }
 const BuscarProveedorId = async function (req, res, next) {
     try {
-        const proveedor = await Proveedor.BuscarProveedorId(req.params.id);
+        const proveedor = await Proveedor.findById(req.params.id);
         if (!proveedor) {
             return res.status(404).json({ message: 'proveedor not found' });
         }
