@@ -1,9 +1,5 @@
 var mongoose = require('mongoose');
 const LotesSchema = mongoose.Schema({
-    _id:{
-        type: String,
-        default: () => nanoid(),
-    },
     Existencias:{
         type: Number,
         require: true,
@@ -13,8 +9,12 @@ const LotesSchema = mongoose.Schema({
         default: Date.now,
         require: true,
     },
+    Estatus:{
+        type: Boolean,
+        default: true
+    }
     
 });
 const Lotes = mongoose.model('Lotes', LotesSchema);
 
-module.export = Lotes;
+module.exports = Lotes;
