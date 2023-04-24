@@ -1,9 +1,5 @@
 var mongoose = require('mongoose');
 const MedicamentoSchema = mongoose.Schema({
-    _id:{
-        type: String,
-        default: () => nanoid(),
-    },
     nombreMedicamento:{
         type: String,
         require: true,
@@ -48,4 +44,4 @@ const MedicamentoSchema = mongoose.Schema({
 });
 const Medicamento = mongoose.model('Medicamentos', MedicamentoSchema);
 
-module.export = Medicamento;
+module.exports = Medicamento;

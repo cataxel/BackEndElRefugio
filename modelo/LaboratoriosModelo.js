@@ -1,9 +1,5 @@
 var mongoose = require('mongoose');
 const LaboratioriosSchema = mongoose.Schema({
-    _id:{
-        type: String,
-        default: () => nanoid(),
-    },
     Nombre:{
         type: String,
         require: true,
@@ -28,8 +24,12 @@ const LaboratioriosSchema = mongoose.Schema({
         type: String,
         require: true,
     },
+    Estatus:{
+        type: Boolean,
+        default: true
+    }
     
 });
 const Laboratiorios = mongoose.model('Laboratiorios', LaboratioriosSchema);
 
-module.export = Laboratiorios;
+module.exports = Laboratiorios;
