@@ -1,13 +1,13 @@
 var mongoose = require('mongoose');
 const ComprasSchema = mongoose.Schema({
-    _id:{
-        type: String,
-        default: () => nanoid(),
-    },
     FechaCompra:{
         type: Date,
         default: Date.now,
         require: true,
+    },
+    CantidadCompra:{
+        type: Number,
+        require: true
     },
     TotalCompra:{
         type: Number,
@@ -16,4 +16,4 @@ const ComprasSchema = mongoose.Schema({
 });
 const Compras = mongoose.model('Compras', ComprasSchema);
 
-module.export = Compras;
+module.exports = Compras;

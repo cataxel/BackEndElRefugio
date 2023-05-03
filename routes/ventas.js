@@ -3,9 +3,9 @@ var router = express.Router();
 const controlador = require('../controlador/VentasControlador.js');
 /* inicio */
 router.get('/', controlador.Ventas);
-//buscar venta por id
-router.post('/:ventaid',controlador.BuscarVentaId);
 // nueva venta
-router.post('/NuevaVenta',controlador.NuevoVenta);
+router.post('/nueva',controlador.NuevoVenta);
+//buscar venta por id
+router.post('/:id',controlador.BuscarVentaId);
 
 module.exports = router;
