@@ -2,6 +2,7 @@ const Venta = require("../modelo/VentasModelo.js");
 const Joi = require('joi');
 const NuevoVenta = async function(req,res,next){
     try {
+        /*
         const Schema = Joi.object({
             Iva: Joi.number().required(),
             SubTotal:Joi.number().required(),
@@ -12,13 +13,13 @@ const NuevoVenta = async function(req,res,next){
         const { error, value } = Schema.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
-        }
+        }*/
         const {
             Fecha,
             Iva,
             SubTotal,
             MetodoPago
-        } = value;
+        } = req.body;
         const newVenta = new Venta({
             Fecha,
             Iva,

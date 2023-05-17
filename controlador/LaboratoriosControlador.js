@@ -9,6 +9,7 @@ const Joi = require('joi');
     }, */
 const NuevoLaboratorio = async function (req, res, next) {
     try {
+        /*
         const Schema = Joi.object({
             Nombre: Joi.string().required(),
             Direccion: Joi.string().required(),
@@ -21,7 +22,7 @@ const NuevoLaboratorio = async function (req, res, next) {
         const { error, value } = Schema.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
-        }
+        }*/
         const {
             Nombre,
             Direccion,
@@ -30,7 +31,7 @@ const NuevoLaboratorio = async function (req, res, next) {
             Localidad,
             Email,
             Estatus
-        } = value;
+        } = req.body;
         const newlaboratorio = new Laboratorio({
             Nombre,
             Direccion,
@@ -53,6 +54,7 @@ const NuevoLaboratorio = async function (req, res, next) {
 }
 const ModificarLaboratorio = async function (req, res, next) {
     try {
+        /*
         const Schema = Joi.object({
             Nombre: Joi.string().required(),
             Direccion: Joi.string().required(),
@@ -65,7 +67,7 @@ const ModificarLaboratorio = async function (req, res, next) {
         const { error, value } = Schema.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
-        }
+        }*/
         const {
             Nombre,
             Direccion,
@@ -74,7 +76,7 @@ const ModificarLaboratorio = async function (req, res, next) {
             Localidad,
             Email,
             Estatus
-        } = value;
+        } = req.body;
         const laboratorioid = req.params.id;
         const laboratorio = await Laboratorio.findOneAndUpdate(
             { _id: laboratorioid },
@@ -101,16 +103,17 @@ const ModificarLaboratorio = async function (req, res, next) {
 }
 const DesactivarLaboratorio = async function (req, res, next) {
     try {
+        /*
         const Schema = Joi.object({
             Estatus: Joi.boolean()
         });
         const { error, value } = Schema.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
-        }
+        }*/
         const {
             Estatus
-        } = value;
+        } = req.body;
         const laboratorioid = req.params.id;
         const laboratorio = await Laboratorio.findOneAndUpdate(
             { _id: laboratorioid },

@@ -17,6 +17,7 @@ const BuscarUsuarioId = async function (req, res, next) {
 }
 const CrearUsuario = async function (req, res, next) {
     try {
+        /*
         const Schema = Joi.object({
             nombreEmpleado: Joi.string().required(),
             telefonoEmpleado: Joi.string().required(),
@@ -30,7 +31,7 @@ const CrearUsuario = async function (req, res, next) {
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
         }
-        /* const user = new Usuarios({
+        const user = new Usuarios({
             nombreEmpleado: value.nombreEmpleado,
             telefonoEmpleado: value.telefonoEmpleado,
             puestoEmpleado: value.puestoEmpleado,
@@ -45,7 +46,7 @@ const CrearUsuario = async function (req, res, next) {
             edadEmpleado,
             sexoEmpleado,
             AntiguedadEmpleado,
-            Estatus } = value;
+            Estatus } = req.body;
         const newUsuario = new Usuarios({nombreEmpleado,telefonoEmpleado,puestoEmpleado,edadEmpleado,sexoEmpleado,AntiguedadEmpleado,edadEmpleado,Estatus});
         const guardado = await newUsuario.save();
         res.status(201).json(guardado);
@@ -60,6 +61,7 @@ const CrearUsuario = async function (req, res, next) {
 }
 const ActualizarUsuario = async function (req, res, next) {
     try {
+        /*
         const Schema = Joi.object({
             nombreEmpleado: Joi.string().required(),
             telefonoEmpleado: Joi.string().required(),
@@ -72,7 +74,7 @@ const ActualizarUsuario = async function (req, res, next) {
         const { error, value } = Schema.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
-        }
+        }*/
         const { 
             nombreEmpleado,
             telefonoEmpleado,
@@ -80,7 +82,7 @@ const ActualizarUsuario = async function (req, res, next) {
             edadEmpleado,
             sexoEmpleado,
             AntiguedadEmpleado,
-            Estatus } = value;
+            Estatus } = req.body;
         const userId = req.params.id;
         const User = await Usuarios.findOneAndUpdate(
             { _id: userId },
@@ -107,6 +109,7 @@ const ActualizarUsuario = async function (req, res, next) {
 }
 const DesactivarUsuario = async function (req, res, next) {
     try {
+        /*
         const Schema = Joi.object({
             Estatus: Joi.boolean()
         });
@@ -114,8 +117,8 @@ const DesactivarUsuario = async function (req, res, next) {
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
             
-        }
-        const Estatus = value.Estatus;
+        }*/
+        const Estatus = req.body.Estatus;  // posible error
         const userId = req.params.id;
         const User = await Usuarios.findOneAndUpdate(
             { _id: userId },

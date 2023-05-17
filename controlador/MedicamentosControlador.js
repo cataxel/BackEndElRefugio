@@ -1,17 +1,8 @@
 var Medicamento = require("../modelo/MedicamentosModelo.js");
 var Joi = require("joi");
-/* nombreMedicamento type: String,require: true
-tipoMedicamento type: String,require: true,unique: true
-PrecioCompra type:Number,require: true,
-PrecioVenta type: Number,require: true,
-Ganancia type: Number,require:true
-Aplicacion type:String,require:true
-RecetaNecesaria type: Boolean, require:true,
-Compuesto type:String, require:true
-Contenido type:String, require:true
-PatenteOGenerico type:String,require:true*/
 const NuevoMedicamento = async function (req, res, next) {
     try {
+        /*
         const Schema = Joi.object({
             nombreMedicamento: Joi.string().required(),
             tipoMedicamento: Joi.string().required(),
@@ -27,7 +18,7 @@ const NuevoMedicamento = async function (req, res, next) {
         const { error, value } = Schema.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
-        }
+        }*/
         const {
             nombreMedicamento,
             tipoMedicamento,
@@ -39,7 +30,7 @@ const NuevoMedicamento = async function (req, res, next) {
             Compuesto,
             Contendido,
             PatenteOGenerico
-        } = value;
+        } = req.body;
         const newMedicamento = new Medicamento({
             nombreMedicamento,
             tipoMedicamento,
@@ -65,6 +56,7 @@ const NuevoMedicamento = async function (req, res, next) {
 }
 const ModificarMedicamento = async function (req, res, next) {
     try {
+        /*
         const Schema = Joi.object({
             nombreMedicamento: Joi.string().required(),
             tipoMedicamento: Joi.string().required(),
@@ -80,7 +72,7 @@ const ModificarMedicamento = async function (req, res, next) {
         const { error, value } = Schema.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
-        }
+        }*/
         const { nombreMedicamento,
             tipoMedicamento,
             PrecioCompra,
@@ -91,7 +83,7 @@ const ModificarMedicamento = async function (req, res, next) {
             Compuesto,
             Contendido,
             PatenteOGenerico
-        } = value;
+        } = req.body;
         const medicamentoid = req.params.id;
         const medicamento = await Medicamento.findOneAndUpdate(
             { _id: medicamentoid },

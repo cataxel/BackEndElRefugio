@@ -15,6 +15,7 @@ const CompraId = async function(req,res, next){
 }
 const NuevaCompra = async function(req,res, next){
     try {
+        /*
         const Schema = Joi.object({
             FechaCompra:Joi.date().required(),
             CantidadCompra: Joi.number().required(),
@@ -23,12 +24,12 @@ const NuevaCompra = async function(req,res, next){
         const { error, value } = Schema.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
-        }
+        }*/
         const {
             FechaCompra,
             CantidadCompra,
             TotalCompra
-        } = value;
+        } = req.body;
         const newCompra = new Compras({
             FechaCompra,
             CantidadCompra,

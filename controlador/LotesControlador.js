@@ -3,6 +3,7 @@ const Joi = require('joi');
 
 const NuevoLotes = async function (req, res, next) {
     try {
+        /*
         const Schema = Joi.object({
             Existencias: Joi.string().required(),
             FechaCaducidad: Joi.date().required(),
@@ -11,12 +12,12 @@ const NuevoLotes = async function (req, res, next) {
         const { error, value } = Schema.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
-        }
+        }*/
         const {
             Existencias,
             FechaCaducidad,
             Estatus
-        } = value;
+        } = req.body;
         const newLote = new Lotes({ Existencias, FechaCaducidad, Estatus });
         const guardado = await newLote.save();
         res.status(201).json(guardado);
@@ -31,6 +32,7 @@ const NuevoLotes = async function (req, res, next) {
 }
 const ModificarLotes = async function (req, res, next) {
     try {
+        /*
         const Schema = Joi.object({
             Existencias: Joi.string().required(),
             FechaCaducidad: Joi.date().required(),
@@ -39,12 +41,12 @@ const ModificarLotes = async function (req, res, next) {
         const { error, value } = Schema.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
-        }
+        }*/
         const {
             Existencias,
             FechaCaducidad,
             Estatus
-        } = value;
+        } = req.body;
         const loteid = req.params.id;
         const lotes = await Lotes.findOneAndUpdate(
             { _id: loteid },
@@ -67,16 +69,17 @@ const ModificarLotes = async function (req, res, next) {
 }
 const DesactivarLotes = async function (req, res, next) {
     try {
+        /*
         const Schema = Joi.object({
             Estatus: Joi.boolean()
         });
         const { error, value } = Schema.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
-        }
+        }*/
         const {
             Estatus
-        } = value;
+        } = req.body;
         const loteid = req.params.id;
         const lotes = await Lotes.findOneAndUpdate(
             { _id: loteid },
