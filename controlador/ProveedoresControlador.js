@@ -3,6 +3,29 @@ const Joi = require('joi');
 
 const NuevoProveedor = async function (req, res, next) {
     try {
+        const {
+            nombreProveedores,
+            telefonoProveedores,
+            LocalidadProveedores,
+            EstadoProveedores,
+            CPProveedores,
+            DireccionProveedores,
+            Estatus
+        } = req.body;
+
+        const newProveedor = new Proveedor({nombreProveedores,telefonoProveedores,LocalidadProveedores,EstadoProveedores,CPProveedores,DireccionProveedores,Estatus});
+        const guardado = await newProveedor.save();
+        res.status(201).json(guardado);
+    } catch (error) {
+        if (error.code === 11000) {
+            res.status(400).json({ message: 'El numero de telefono ya existe' })
+        } else {
+            console.error(error);
+            res.status(500).json({ message: 'Server error' });
+        }
+    }
+
+    /*try {
         const Schema = Joi.object({
             nombreProveedores: Joi.string().required(),
             telefonoProveedores: Joi.string().required(),
@@ -35,7 +58,7 @@ const NuevoProveedor = async function (req, res, next) {
             console.error(error);
             res.status(500).json({ message: 'Server error' });
         }
-    }
+    }*/
 }
 const ModificarProveedor = async function (req, res, next) {
     try {
