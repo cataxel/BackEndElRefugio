@@ -28,7 +28,7 @@ const NuevoMedicamento = async function (req, res, next) {
             Aplicacion,
             RecetaNecesaria,
             Compuesto,
-            Contendido,
+            Contenido,
             PatenteOGenerico
         } = req.body;
         const newMedicamento = new Medicamento({
@@ -40,7 +40,7 @@ const NuevoMedicamento = async function (req, res, next) {
             Aplicacion,
             RecetaNecesaria,
             Compuesto,
-            Contendido,
+            Contenido,
             PatenteOGenerico
         });
         const guardado = await newMedicamento.save();
@@ -81,7 +81,7 @@ const ModificarMedicamento = async function (req, res, next) {
             Aplicacion,
             RecetaNecesaria,
             Compuesto,
-            Contendido,
+            Contenido,
             PatenteOGenerico
         } = req.body;
         const medicamentoid = req.params.id;
@@ -96,7 +96,7 @@ const ModificarMedicamento = async function (req, res, next) {
                 Aplicacion,
                 RecetaNecesaria,
                 Compuesto,
-                Contendido,
+                Contenido,
                 PatenteOGenerico
             },
             { new: true, runValidators: true }
