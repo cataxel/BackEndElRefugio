@@ -7,9 +7,9 @@ router.get('/',controlador.Medicamentos);
 // nuevo Medicamento
 router.post('/nuevo',controlador.NuevoMedicamento);
 // modificar Medicamento
-router.post('/actualizar/:id',controlador.ModificarMedicamento);
+router.put('/actualizar/:id',controlador.ModificarMedicamento);
 // eliminar Medicamento
-router.post('/desactivar/:id',controlador.EliminarMedicamento);
+router.put('/desactivar/:id',controlador.EliminarMedicamento);
 // un Medicamento por su id
 router.post('/:id',controlador.BuscarMedicamentoId);
 
