@@ -1,8 +1,11 @@
 var mongoose = require('mongoose');
 const LotesSchema = mongoose.Schema({
-    Existencias:{
+    ExistenciasFisica:{
         type: Number,
         require: true,
+    },
+    ExistenciasComprada:{
+        type: Number,
     },
     FechaCaducidad:{
         type: Date,
@@ -12,8 +15,7 @@ const LotesSchema = mongoose.Schema({
     Estatus:{
         type: Boolean,
         default: true
-    }
-    
+    },
 });
 const Lotes = mongoose.model('Lotes', LotesSchema);
 

@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
-const LaboratioriosSchema = mongoose.Schema({
+var Schema = mongoose.Schema;
+const VentaSchema = mongoose.Schema({
     Iva:{
         type: Number,
         require: true,
@@ -16,8 +17,16 @@ const LaboratioriosSchema = mongoose.Schema({
     MetodoPago:{
         type: String,
         require: true,
+    },
+    CantidadVendida:{
+        type: Number,
+        require: true,
+    },
+    Lote:{
+        type: Schema.Types.ObjectId,
+        ref: "lotes",
     }
 });
-const Ventas = mongoose.model('Ventas', LaboratioriosSchema);
+const Ventas = mongoose.model('Ventas', VentaSchema);
 
 module.exports = Ventas;

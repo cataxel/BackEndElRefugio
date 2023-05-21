@@ -14,11 +14,13 @@ const NuevoLotes = async function (req, res, next) {
             return res.status(400).json({ message: error.details[0].message });
         }*/
         const {
-            Existencias,
+            ExistenciasFisica,
+            ExistenciasComprada,
             FechaCaducidad,
             Estatus
         } = req.body;
-        const newLote = new Lotes({ Existencias, FechaCaducidad, Estatus });
+        const newLote = new Lotes({ ExistenciasFisica,
+            ExistenciasComprada, FechaCaducidad, Estatus });
         const guardado = await newLote.save();
         res.status(201).json(guardado);
     } catch (error) {
@@ -43,7 +45,7 @@ const ModificarLotes = async function (req, res, next) {
             return res.status(400).json({ message: error.details[0].message });
         }*/
         const {
-            Existencias,
+            ExistenciasFisica,
             FechaCaducidad,
             Estatus
         } = req.body;
@@ -51,7 +53,7 @@ const ModificarLotes = async function (req, res, next) {
         const lotes = await Lotes.findOneAndUpdate(
             { _id: loteid },
             {
-                Existencias,
+                ExistenciasFisica,
                 FechaCaducidad,
                 Estatus
             },

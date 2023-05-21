@@ -1,5 +1,6 @@
 const Venta = require("../modelo/VentasModelo.js");
 const Joi = require('joi');
+const Lotes = require("../modelo/LotesModelo");
 const NuevoVenta = async function(req,res,next){
     try {
         /*
@@ -18,14 +19,19 @@ const NuevoVenta = async function(req,res,next){
             Fecha,
             Iva,
             SubTotal,
-            MetodoPago
+            MetodoPago,
+            CantidadVendida,
+            Lote,
         } = req.body;
         const newVenta = new Venta({
             Fecha,
             Iva,
             SubTotal,
-            MetodoPago
+            MetodoPago,
+            CantidadVendida,
+            Lote,
         });
+        await ActualizarExistenciasVenta(Lote,CantidadVendida);
         const guardado = await newVenta.save();
         res.status(201).json(guardado);
     } catch (error) {
@@ -54,6 +60,21 @@ const Ventas = async function(req,res,next){
         res.status(500).json({ message: 'Server error' });
     }
 }
+const ActualizarExistenciasVenta = async (lotesid,cantidadVendida) => {
+    try{
+        const lotes = await Lotes.findById(lotesid);
+        if(!lotes){
+            throw new Error('Lote no encontrado');
+        }
+        if(cantidadVendida> lotes.ExistenciasFisica){
+            throw new Error('No hay suficientes existencias');
+        }
+        lotes.ExistenciasFisica = Number(lotes.ExistenciasFisica) - Number(cantidadVendida);
+        await lotes.save();
+    }catch (error) {
+        throw error;
+    }
+};
 module.exports = {
     NuevoVenta,
     BuscarVentaId,

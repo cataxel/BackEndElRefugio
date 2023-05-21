@@ -1,4 +1,5 @@
 const Compras = require("../modelo/ComprasModelo.js");
+const Lotes = require("../modelo/LotesModelo.js");
 const Joi = require('joi');
 // empleados
 const CompraId = async function(req,res, next){
@@ -25,15 +26,19 @@ const NuevaCompra = async function(req,res, next){
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
         }*/
+
         const {
             FechaCompra,
             CantidadCompra,
-            TotalCompra
+            TotalCompra,
+            Lote,
         } = req.body;
         const newCompra = new Compras({
             FechaCompra,
             CantidadCompra,
-            TotalCompra });
+            TotalCompra,
+            Lote});
+        await ActualizarExistenciasCompra(Lote,CantidadCompra);
         const guardado = await newCompra.save();
         res.status(201).json(guardado);
     } catch (error) {
@@ -54,6 +59,20 @@ const Compra = async function(req,res,next){
         res.status(500).json({ message: 'Server error' });
     }
 }
+
+const ActualizarExistenciasCompra = async (loteid,cantidadCompra) => {
+    try{
+        const lotes = await Lotes.findById(loteid);
+        const temp = Number(lotes.ExistenciasFisica) + Number(cantidadCompra);
+        if(!lotes){
+            throw new Error('Lote no encontrado');
+        }
+        lotes.ExistenciasFisica = temp;
+        await lotes.save();
+    }catch (error) {
+        throw error;
+    }
+};
 module.exports = {
     CompraId,
     NuevaCompra,
