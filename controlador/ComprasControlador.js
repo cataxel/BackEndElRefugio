@@ -1,5 +1,5 @@
 const Compras = require("../modelo/ComprasModelo.js");
-const Lotes = require("../modelo/LotesModelo.js");
+const Lotesmodelo = require("../modelo/LotesModelo.js");
 const Joi = require('joi');
 // empleados
 const CompraId = async function(req,res, next){
@@ -31,16 +31,32 @@ const NuevaCompra = async function(req,res, next){
             FechaCompra,
             CantidadCompra,
             TotalCompra,
-            Lote,
+            Lotes,
         } = req.body;
         const newCompra = new Compras({
             FechaCompra,
             CantidadCompra,
             TotalCompra,
-            Lote});
-        await ActualizarExistenciasCompra(Lote,CantidadCompra);
+            Lotes});
+        //await ActualizarExistenciasCompra(Lote,CantidadCompra);
         const guardado = await newCompra.save();
-        res.status(201).json(guardado);
+        // Guardar los lotes y establecer la relación con la compra
+        const lotesGuardados = [];
+        for (const loteData of Lotes) {
+            const lote = new Lotesmodelo({
+                ExistenciasFisica: loteData.ExistenciasFisica,
+                ExistenciasComprada: loteData.ExistenciasComprada,
+                FechaCaducidad: loteData.FechaCaducidad,
+                Estatus: loteData.Estatus,
+                Compra: guardado._id, // Establecer la referencia a la compra
+            });
+            const loteGuardado = await lote.save();
+            lotesGuardados.push(loteGuardado);
+        }
+        res.status(201).json({
+            compra: guardado,
+            lotes: lotesGuardados,
+        });
     } catch (error) {
         if (error.code === 11000) {
             res.status(400).json({ message: 'Compra ya existe' })

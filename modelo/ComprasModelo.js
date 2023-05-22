@@ -1,23 +1,28 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var lotes = require('./LotesModelo.js');
 
 const ComprasSchema = mongoose.Schema({
     FechaCompra:{
         type: Date,
         default: Date.now,
-        require: true,
+        required: true,
     },
     CantidadCompra:{
         type: Number,
-        require: true
+        required: true
     },
     TotalCompra:{
         type: Number,
-        require: true,
+        required: true,
     },
-    Lote:{
-        type: Schema.ObjectId, ref: "Lotes",
-    }
+    medicamento:{
+        type: String,
+    },
+    precio:{
+        type: Number,
+    },
+    Lotes: [lotes.schema],
 });
 const Compras = mongoose.model('Compras', ComprasSchema);
 
