@@ -29,13 +29,11 @@ const NuevaCompra = async function(req,res, next){
 
         const {
             FechaCompra,
-            CantidadCompra,
             TotalCompra,
             Lotes,
         } = req.body;
         const newCompra = new Compras({
             FechaCompra,
-            CantidadCompra,
             TotalCompra,
             Lotes});
         //await ActualizarExistenciasCompra(Lote,CantidadCompra);

@@ -8,10 +8,6 @@ const ComprasSchema = mongoose.Schema({
         default: Date.now,
         required: true,
     },
-    CantidadCompra:{
-        type: Number,
-        required: true
-    },
     TotalCompra:{
         type: Number,
         required: true,
