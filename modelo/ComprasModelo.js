@@ -16,12 +16,6 @@ const ComprasSchema = mongoose.Schema({
         type: Number,
         required: true,
     },
-    medicamento:{
-        type: String,
-    },
-    precio:{
-        type: Number,
-    },
     Lotes: [lotes.schema],
 });
 const Compras = mongoose.model('Compras', ComprasSchema);

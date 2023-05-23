@@ -17,6 +17,12 @@ const LotesSchema = mongoose.Schema({
         type: Boolean,
         default: true
     },
+    Medicamento:{
+        type: String,
+    },
+    Precio:{
+        type: Number,
+    },
     Compra: {
         type: Schema.Types.ObjectId,
         ref: 'Compras',

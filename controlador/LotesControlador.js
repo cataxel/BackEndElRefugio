@@ -17,10 +17,12 @@ const NuevoLotes = async function (req, res, next) {
             ExistenciasFisica,
             ExistenciasComprada,
             FechaCaducidad,
-            Estatus
+            Estatus,
+            Medicamento,
+            Precio,
         } = req.body;
         const newLote = new Lotes({ ExistenciasFisica,
-            ExistenciasComprada, FechaCaducidad, Estatus });
+            ExistenciasComprada, FechaCaducidad, Estatus, Medicamento, Precio });
         const guardado = await newLote.save();
         res.status(201).json(guardado);
     } catch (error) {
@@ -47,7 +49,9 @@ const ModificarLotes = async function (req, res, next) {
         const {
             ExistenciasFisica,
             FechaCaducidad,
-            Estatus
+            Estatus,
+            Medicamento,
+            Precio
         } = req.body;
         const loteid = req.params.id;
         const lotes = await Lotes.findOneAndUpdate(
@@ -55,7 +59,9 @@ const ModificarLotes = async function (req, res, next) {
             {
                 ExistenciasFisica,
                 FechaCaducidad,
-                Estatus
+                Estatus,
+                Medicamento,
+                Precio,
             },
             { new: true, runValidators: true }
         );

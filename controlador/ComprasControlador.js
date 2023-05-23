@@ -48,6 +48,8 @@ const NuevaCompra = async function(req,res, next){
                 ExistenciasComprada: loteData.ExistenciasComprada,
                 FechaCaducidad: loteData.FechaCaducidad,
                 Estatus: loteData.Estatus,
+                Medicamento: loteData.Medicamento,
+                Precio: loteData.Precio,
                 Compra: guardado._id, // Establecer la referencia a la compra
             });
             const loteGuardado = await lote.save();
