@@ -29,7 +29,8 @@ const NuevoMedicamento = async function (req, res, next) {
             RecetaNecesaria,
             Compuesto,
             Contenido,
-            PatenteOGenerico
+            PatenteOGenerico,
+            Laboratorio,
         } = req.body;
         const newMedicamento = new Medicamento({
             nombreMedicamento,
@@ -41,7 +42,8 @@ const NuevoMedicamento = async function (req, res, next) {
             RecetaNecesaria,
             Compuesto,
             Contenido,
-            PatenteOGenerico
+            PatenteOGenerico,
+            Laboratorio
         });
         const guardado = await newMedicamento.save();
         res.status(201).json(guardado);
@@ -82,7 +84,8 @@ const ModificarMedicamento = async function (req, res, next) {
             RecetaNecesaria,
             Compuesto,
             Contenido,
-            PatenteOGenerico
+            PatenteOGenerico,
+            Laboratorio
         } = req.body;
         const medicamentoid = req.params.id;
         const medicamento = await Medicamento.findOneAndUpdate(
@@ -97,7 +100,8 @@ const ModificarMedicamento = async function (req, res, next) {
                 RecetaNecesaria,
                 Compuesto,
                 Contenido,
-                PatenteOGenerico
+                PatenteOGenerico,
+                Laboratorio
             },
             { new: true, runValidators: true }
         );

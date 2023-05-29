@@ -41,6 +41,10 @@ const MedicamentoSchema = mongoose.Schema({
         type:String,
         require:true
     },
+    Laboratorio:{
+        type:String,
+        ref: 'Laboratorios'
+    }
 });
 const Medicamento = mongoose.model('Medicamentos', MedicamentoSchema);
 
