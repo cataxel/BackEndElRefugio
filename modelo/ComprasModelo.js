@@ -13,6 +13,10 @@ const ComprasSchema = mongoose.Schema({
         required: true,
     },
     Lotes: [lotes.schema],
+    Proveedores:{
+        type: String,
+        ref: 'Proveedores',
+    },
 });
 const Compras = mongoose.model('Compras', ComprasSchema);
 

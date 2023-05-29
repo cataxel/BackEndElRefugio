@@ -31,11 +31,13 @@ const NuevaCompra = async function(req,res, next){
             FechaCompra,
             TotalCompra,
             Lotes,
+            Proveedores,
         } = req.body;
         const newCompra = new Compras({
             FechaCompra,
             TotalCompra,
-            Lotes});
+            Lotes,
+            Proveedores});
         //await ActualizarExistenciasCompra(Lote,CantidadCompra);
         const guardado = await newCompra.save();
         // Guardar los lotes y establecer la relación con la compra

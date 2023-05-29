@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+
 const LotesSchema = mongoose.Schema({
     ExistenciasFisica:{
         type: Number,
