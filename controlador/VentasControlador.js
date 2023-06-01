@@ -31,8 +31,21 @@ const NuevoVenta = async function(req,res,next){
             CantidadVendida,
             Lote,
         });
-        await ActualizarExistenciasVenta(Lote,CantidadVendida);
+        var i = 0
+        for (var Lote1 of Lote) {
+            try{
+                Lote1 = Lote1.Lote
+                cantidadVendida1 = CantidadVendida[i].cantidadVendida1;
+                if(cantidadVendida1 != null) {
+                    await ActualizarExistenciasVenta(Lote1,cantidadVendida1);
+                }
+            }catch (error){
+                console.error(`Error al actualizar existencias para el lote con ID ${Lote1}:`, error.message)
+            }
+            i++
+        }
         const guardado = await newVenta.save();
+
         res.status(201).json(guardado);
     } catch (error) {
         console.error(error);

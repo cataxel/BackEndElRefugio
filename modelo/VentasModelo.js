@@ -18,14 +18,16 @@ const VentaSchema = mongoose.Schema({
         type: String,
         require: true,
     },
-    CantidadVendida:{
-        type: Number,
-        require: true,
-    },
-    Lote:{
+    CantidadVendida:[
+        {
+            type: Number,
+            require: true,
+        }
+    ],
+    Lote: [{
         type: Schema.Types.ObjectId,
-        ref: "lotes",
-    }
+        ref: 'Lotes'
+    }]
 });
 const Ventas = mongoose.model('Ventas', VentaSchema);
 
