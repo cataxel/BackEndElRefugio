@@ -12,5 +12,6 @@ router.put('/actualizar/:id', controlador.ActualizarUsuario);
 // desactivar los usuarios
 router.put('/desactivar/:id', controlador.DesactivarUsuario);
 // buscar usuario por id
-router.post('/:id',controlador.BuscarUsuarioId);
+router.get('/:id',controlador.BuscarUsuarioId);
+
 module.exports = router;

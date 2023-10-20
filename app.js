@@ -4,7 +4,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require("cors");
 
-var connectarDB = require("./config/db");
+//var connectarDB = require("./config/db");
+var connectarDB = require("./config/mysql");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -23,8 +24,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-connectarDB();
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

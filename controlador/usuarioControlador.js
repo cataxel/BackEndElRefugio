@@ -1,3 +1,5 @@
+const { use } = require("../app.js");
+const UserModel = require("../modelo/usuarioModelo.js");
 var Usuarios = require("../modelo/usuarioModelo.js")
 const Joi = require('joi');
 // empleados
@@ -5,41 +7,37 @@ const Joi = require('joi');
 //buscar usuario por id
 const BuscarUsuarioId = async function (req, res, next) {
     try {
-        const user = await Usuarios.BuscarUsuarioId(req.params.id);
+        const user = await Usuarios.getUserById(req.params.id);
+        console.log(user);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-        res.status(200).json(user);
+        res.status(200).json(user[0]);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
     }
 }
 const CrearUsuario = async function (req, res, next) {
-    try {
-        /*
-        const Schema = Joi.object({
-            nombreEmpleado: Joi.string().required(),
-            telefonoEmpleado: Joi.string().required(),
-            puestoEmpleado: Joi.string().required(),
-            edadEmpleado: Joi.string().required(),
-            sexoEmpleado: Joi.string(),
-            AntiguedadEmpleado: Joi.date(),
-            Estatus: Joi.boolean()
-        });
-        const { error, value } = Schema.validate(req.body);
-        if (error) {
-            return res.status(400).json({ message: error.details[0].message });
+    var User = [
+        req.body.NombreEmp,
+        req.body.TelEmp,
+        req.body.PuestoEmp,
+        req.body.EdadEmp,
+        req.body.SexoEmp,
+        req.body.AntigEmp,
+    ]
+    console.log(User);
+    UserModel.createUser(User, (err, result) => {
+        if(err){
+            res.status(500).json({error: err.message});
+        } else {
+            res.status(201).json({message: 'User created succesfully', id: result.insertId});
         }
-        const user = new Usuarios({
-            nombreEmpleado: value.nombreEmpleado,
-            telefonoEmpleado: value.telefonoEmpleado,
-            puestoEmpleado: value.puestoEmpleado,
-            edadEmpleado: value.edadEmpleado,
-            sexoEmpleado: value.sexoEmpleado,
-            AntiguedadEmpleado: value.AntiguedadEmpleado,
-            Estatus: value.Estatus
-        }); */
+    })
+    
+}
+/*try {
         const { nombreEmpleado,
             telefonoEmpleado,
             puestoEmpleado,
@@ -47,7 +45,7 @@ const CrearUsuario = async function (req, res, next) {
             sexoEmpleado,
             AntiguedadEmpleado,
             Estatus } = req.body;
-        const newUsuario = new Usuarios({nombreEmpleado,telefonoEmpleado,puestoEmpleado,edadEmpleado,sexoEmpleado,AntiguedadEmpleado,edadEmpleado,Estatus});
+        const newUsuario = new CrearUsuario({nombreEmpleado,telefonoEmpleado,puestoEmpleado,edadEmpleado,sexoEmpleado,AntiguedadEmpleado,edadEmpleado,Estatus});
         const guardado = await newUsuario.save();
         res.status(201).json(guardado);
     } catch (error) {
@@ -57,51 +55,24 @@ const CrearUsuario = async function (req, res, next) {
             console.error(error);
             res.status(500).json({ message: 'Server error' });
         }
-    }
-}
+    }*/
 const ActualizarUsuario = async function (req, res, next) {
     try {
-        /*
-        const Schema = Joi.object({
-            nombreEmpleado: Joi.string().required(),
-            telefonoEmpleado: Joi.string().required(),
-            puestoEmpleado: Joi.string().required(),
-            edadEmpleado: Joi.string().required(),
-            sexoEmpleado: Joi.string(),
-            AntiguedadEmpleado: Joi.date(),
-            Estatus: Joi.boolean()
-        });
-        const { error, value } = Schema.validate(req.body);
-        if (error) {
-            return res.status(400).json({ message: error.details[0].message });
-        }*/
-        const { 
-            nombreEmpleado,
-            telefonoEmpleado,
-            puestoEmpleado,
-            edadEmpleado,
-            sexoEmpleado,
-            AntiguedadEmpleado,
-            Estatus } = req.body;
+        var Userpar = [
+            req.body.NombreEmp,
+            req.body.TelEmp,
+            req.body.PuestoEmp,
+            req.body.EdadEmp,
+            req.body.SexoEmp,
+            req.body.AntigEmp,
+        ]
         const userId = req.params.id;
-        const User = await Usuarios.findOneAndUpdate(
-            { _id: userId },
-            {
-                nombreEmpleado,
-                telefonoEmpleado,
-                puestoEmpleado,
-                edadEmpleado,
-                sexoEmpleado,
-                AntiguedadEmpleado,
-                Estatus
-            },
-            { new: true, runValidators: true }
-        );
+        const User = await Usuarios.updateUser(Userpar,userId);
         if (!User) {
             return res.status(404).json({ message: 'User not found' });
         }
         console.log(User)
-        res.status(200).json(User);
+        res.status(200).json({message: 'Usuario updated succesfully'});
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
@@ -109,15 +80,6 @@ const ActualizarUsuario = async function (req, res, next) {
 }
 const DesactivarUsuario = async function (req, res, next) {
     try {
-        /*
-        const Schema = Joi.object({
-            Estatus: Joi.boolean()
-        });
-        const { error, value } = Schema.validate(req.body);
-        if (error) {
-            return res.status(400).json({ message: error.details[0].message });
-            
-        }*/
         const Estatus = req.body.Estatus;  // posible error
         const userId = req.params.id;
         const User = await Usuarios.findOneAndUpdate(
@@ -136,7 +98,8 @@ const DesactivarUsuario = async function (req, res, next) {
 }
 const Usuario = async function (req,res,next){
     try{
-        const user = await Usuarios.find();
+        const user = await Usuarios.getAllUsers();
+        console.log(user);
         res.status(200).json(user);
     }catch(error){
         console.error(error);
