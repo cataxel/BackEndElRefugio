@@ -1,160 +1,133 @@
+const { tryEach } = require("async");
 var Laboratorio = require("../modelo/LaboratoriosModelo.js");
-const Joi = require('joi');
-/* Nombre: type: String,require: true,
-    Direccion:type: String,require: true,
-    Estado:type: String, require: true,,
-    CP: type: String,require: true,
-    Localidad: type: String,require: true,
-    Email: type: String, require: true,
-    }, */
-const NuevoLaboratorio = async function (req, res, next) {
-    try {
-        /*
-        const Schema = Joi.object({
-            Nombre: Joi.string().required(),
-            Direccion: Joi.string().required(),
-            Estado: Joi.string().required(),
-            CP: Joi.string().required(),
-            Localidad: Joi.string().required(),
-            Email: Joi.string().required(),
-            Estatus: Joi.bool()
-        });
-        const { error, value } = Schema.validate(req.body);
-        if (error) {
-            return res.status(400).json({ message: error.details[0].message });
-        }*/
-        const {
-            Nombre,
-            Direccion,
-            Estado,
-            CP,
-            Localidad,
-            Email,
-            Estatus
-        } = req.body;
-        const newlaboratorio = new Laboratorio({
-            Nombre,
-            Direccion,
-            Estado,
-            CP,
-            Localidad,
-            Email,
-            Estatus
-        });
-        const guardado = await newlaboratorio.save();
-        res.status(201).json(guardado);
-    } catch (error) {
-        if (error.code === 11000) {
-            res.status(400).json({ message: 'El tipo de laboratorio ya existe' })
-        } else {
-            console.error(error);
-            res.status(500).json({ message: 'Server error' });
+
+/**
+ * Busca un laboratorio por su ID
+ * @param {Object} req - Objeto de solicitud HTTP
+ * @param {Object} res - Objeto de respuesta HTTP
+ * @param {Function} next - Función de middleware para pasar al siguiente controlador
+ * @returns {Object} - Objeto JSON que contiene el laboratorio encontrado
+ */
+const BuscarLaboratorioId = async function(req,res,next) {
+    try{
+        const lab = await Laboratorio.getLabById(req.params.id);
+        if(!lab){
+            return res.status(404).json({message:'Lab not found'})
         }
+        res.status(200).json(lab[0]);
+    }catch(error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
     }
 }
-const ModificarLaboratorio = async function (req, res, next) {
-    try {
-        /*
-        const Schema = Joi.object({
-            Nombre: Joi.string().required(),
-            Direccion: Joi.string().required(),
-            Estado: Joi.string().required(),
-            CP: Joi.string().required(),
-            Localidad: Joi.string().required(),
-            Email: Joi.string().required(),
-            Estatus: Joi.bool()
-        });
-        const { error, value } = Schema.validate(req.body);
-        if (error) {
-            return res.status(400).json({ message: error.details[0].message });
-        }*/
-        const {
-            Nombre,
-            Direccion,
-            Estado,
-            CP,
-            Localidad,
-            Email,
-            Estatus
-        } = req.body;
-        const laboratorioid = req.params.id;
-        const laboratorio = await Laboratorio.findOneAndUpdate(
-            { _id: laboratorioid },
-            {
-                Nombre,
-                Direccion,
-                Estado,
-                CP,
-                Localidad,
-                Email,
-                Estatus
-            },
-            { new: true, runValidators: true }
-        );
-        if (!laboratorio) {
-            return res.status(404).json({ message: 'laboratorio not found' });
-        }
-        console.log(laboratorio)
-        res.status(200).json(laboratorio);
+
+/**
+ * Crea un nuevo laboratorio
+ * @param {Object} req - Objeto de solicitud HTTP
+ * @param {Object} res - Objeto de respuesta HTTP
+ * @param {Function} next - Función de middleware para pasar al siguiente controlador
+ * @returns {Object} - Objeto JSON que indica si el laboratorio se creó correctamente y su ID
+ */
+const NuevoLaboratorio = async function(req,res,next){
+    try{
+        var laboratorio = [
+            req.body.NomLab,
+            req.body.DirLab,
+            req.body.EstLab,
+            req.body.CPLab,
+            req.body.LocLab,
+            req.body.EmailLab,
+            req.body.Estatus
+        ]
+        Laboratorio.CreateLab(laboratorio, (err,result) => {
+            if(err){
+                res.status(500).json({error: err.message});
+            } else {
+                res.status(201).json({message: 'Laboratory created succesfully', id: result.insertId});
+            }
+        })
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
     }
 }
+
+/**
+ * Modifica un laboratorio existente
+ * @param {Object} req - Objeto de solicitud HTTP
+ * @param {Object} res - Objeto de respuesta HTTP
+ * @param {Function} next - Función de middleware para pasar al siguiente controlador
+ * @returns {Object} - Objeto JSON que indica si el laboratorio se actualizó correctamente y su ID
+ */
+const ModificarLaboratorio = async function(req,res,next){
+    try {
+        var laboratorio = [
+            req.body.NomLab,
+            req.body.DirLab,
+            req.body.EstLab,
+            req.body.CPLab,
+            req.body.LocLab,
+            req.body.EmailLab,
+            req.body.Estatus
+        ]
+        var LabId = req.params.id;
+        Laboratorio.UpdateLab(laboratorio,LabId,(err,result) => {
+            if(err){
+                res.status(500).json({error: err.message});
+            } else {
+                res.status(201).json({message: 'Laboratory updated succesfully', id: result.insertId});
+            }
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+}
+
+/**
+ * Desactiva un laboratorio existente
+ * @param {Object} req - Objeto de solicitud HTTP
+ * @param {Object} res - Objeto de respuesta HTTP
+ * @param {Function} next - Función de middleware para pasar al siguiente controlador
+ * @returns {Object} - Objeto JSON que indica si el laboratorio se desactivó correctamente
+ */
 const DesactivarLaboratorio = async function (req, res, next) {
     try {
-        /*
-        const Schema = Joi.object({
-            Estatus: Joi.boolean()
-        });
-        const { error, value } = Schema.validate(req.body);
-        if (error) {
-            return res.status(400).json({ message: error.details[0].message });
-        }*/
-        const {
-            Estatus
-        } = req.body;
-        const laboratorioid = req.params.id;
-        const laboratorio = await Laboratorio.findOneAndUpdate(
-            { _id: laboratorioid },
-            { Estatus: Estatus },
-            { new: true, runValidators: true }
-        )
-        if (!laboratorio) {
-            return res.status(404).json({ message: 'laboratorio not found' });
+        const Estatus = req.body.Estatus;  // posible error
+        const LabId = req.params.id;
+        const Lab = await Laboratorio.DesactivateLab(LabId,Estatus);
+        if (!Lab) {
+            return res.status(404).json({ message: 'Lab not found' });
         }
-        console.log(laboratorio)
-        res.status(200).json(laboratorio);
+        console.log(Lab)
+        res.status(200).json({message: 'Lab Desactivate succesfully'});
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
     }
 }
-const BuscarLaboratorioId = async function (req, res, next) {
-    try {
-        const laboratorio = await Laboratorio.findById(req.params.id);
-        if (!laboratorio) {
-            return res.status(404).json({ message: 'laboratorio not found' });
-        }
-        res.status(200).json(laboratorio);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
-    }
-}
+
+/**
+ * Obtiene todos los laboratorios
+ * @param {Object} req - Objeto de solicitud HTTP
+ * @param {Object} res - Objeto de respuesta HTTP
+ * @param {Function} next - Función de middleware para pasar al siguiente controlador
+ * @returns {Object} - Objeto JSON que contiene todos los laboratorios
+ */
 const Laboratorios = async function (req, res, next) {
     try {
-        const laboratorio = await Laboratorio.find();
-        res.status(200).json(laboratorio);
+        const lab = await Laboratorio.getAllLabs();
+        console.log(lab);
+        res.status(200).json(lab)
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        
     }
 }
+
 module.exports = {
     NuevoLaboratorio,
     ModificarLaboratorio,
     DesactivarLaboratorio,
     BuscarLaboratorioId,
-    Laboratorios
-}
+    Laboratorios}
+

@@ -10,7 +10,7 @@ router.put('/actualizar/:id',controlador.ModificarLaboratorio);
 // eliminar proeedor
 router.put('/desactivar/:id',controlador.DesactivarLaboratorio);
 // un provedor por su id
-router.post('/:id',controlador.BuscarLaboratorioId);
+router.get('/:id',controlador.BuscarLaboratorioId);
 
 
 module.exports = router;

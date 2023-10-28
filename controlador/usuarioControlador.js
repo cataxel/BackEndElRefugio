@@ -26,6 +26,7 @@ const CrearUsuario = async function (req, res, next) {
         req.body.EdadEmp,
         req.body.SexoEmp,
         req.body.AntigEmp,
+        req.body.Estatus
     ]
     console.log(User);
     UserModel.createUser(User, (err, result) => {
@@ -37,25 +38,6 @@ const CrearUsuario = async function (req, res, next) {
     })
     
 }
-/*try {
-        const { nombreEmpleado,
-            telefonoEmpleado,
-            puestoEmpleado,
-            edadEmpleado,
-            sexoEmpleado,
-            AntiguedadEmpleado,
-            Estatus } = req.body;
-        const newUsuario = new CrearUsuario({nombreEmpleado,telefonoEmpleado,puestoEmpleado,edadEmpleado,sexoEmpleado,AntiguedadEmpleado,edadEmpleado,Estatus});
-        const guardado = await newUsuario.save();
-        res.status(201).json(guardado);
-    } catch (error) {
-        if (error.code === 11000) {
-            res.status(400).json({ message: 'El numero de telefono ya existe' })
-        } else {
-            console.error(error);
-            res.status(500).json({ message: 'Server error' });
-        }
-    }*/
 const ActualizarUsuario = async function (req, res, next) {
     try {
         var Userpar = [
@@ -65,6 +47,7 @@ const ActualizarUsuario = async function (req, res, next) {
             req.body.EdadEmp,
             req.body.SexoEmp,
             req.body.AntigEmp,
+            req.body.Estatus
         ]
         const userId = req.params.id;
         const User = await Usuarios.updateUser(Userpar,userId);
@@ -82,15 +65,11 @@ const DesactivarUsuario = async function (req, res, next) {
     try {
         const Estatus = req.body.Estatus;  // posible error
         const userId = req.params.id;
-        const User = await Usuarios.findOneAndUpdate(
-            { _id: userId },
-            { Estatus },
-            { new: true, runValidators: true }
-        );
+        const User = await Usuarios.desactivateUser(userId,Estatus);
         if (!User) {
             return res.status(404).json({ message: 'User not found' });
         }
-        res.status(200).json(User);
+        res.status(200).json({message:"Usuario Updated Succesfully"});
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });

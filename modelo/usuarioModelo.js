@@ -18,7 +18,6 @@ const UserModel = {
         });
     },
     getUserById: (CveEmp) => {
-        
         return new Promise((resolve,reject) => {
             console.log(CveEmp);
             db.query('SELECT * FROM Empleados WHERE CveEmp = ?', [CveEmp], (err,results) => {
@@ -32,12 +31,12 @@ const UserModel = {
         
     },
     createUser: (user,callback) => {
-        db.query('INSERT INTO Empleados (NombreEmp, TelEmp, PuestoEmp, EdadEmp, SexoEmp, AntigEmp) values (?,?,?,?,?,?)', user, callback);
+        db.query('INSERT INTO Empleados (NombreEmp, TelEmp, PuestoEmp, EdadEmp, SexoEmp, AntigEmp, Estatus) values (?,?,?,?,?,?,?)', user, callback);
     },
     updateUser: (User, CveEmp) => {
         return new Promise((resolve , reject) => {
             console.log(User)
-            db.query('UPDATE Empleados SET NombreEmp=?, TelEmp=?, PuestoEmp=?, EdadEmp=?, SexoEmp=?, AntigEmp=? WHERE CveEmp = ?', [User[0], User[1], User[2], User[3], User[4], User[5], CveEmp], (err,results) => {
+            db.query('UPDATE Empleados SET NombreEmp=?, TelEmp=?, PuestoEmp=?, EdadEmp=?, SexoEmp=?, AntigEmp=?, Estatus=? WHERE CveEmp = ?', [User[0], User[1], User[2], User[3], User[4], User[5],User[6], CveEmp], (err,results) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -46,8 +45,16 @@ const UserModel = {
             });
         });        
     },
-    deleteUser: (CveEmp, callback) => {
-        db.query('DELETE FROM Empleados WHERE CveEmp = ?', [CveEmp], callback);
+    desactivateUser: (CveEmp,Estatus) => {
+        return new Promise((resolve, reject) =>{
+            db.query('UPDATE Empleados SET Estatus=? WHERE CveEmp = ?',[Estatus ,CveEmp],(err,results) => {
+                if (err) {
+                    reject(err)
+                }else {
+                    resolve(results)
+                }
+            });
+        })
     },
 };
 
