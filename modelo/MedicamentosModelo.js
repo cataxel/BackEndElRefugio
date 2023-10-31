@@ -1,5 +1,6 @@
 const { reject } = require('async');
 const db = require('../config/mysql');
+const tablaIntermedia = require('./TablaIntMedLabModelo');
 
 /**
  * @typedef {Object} Medicamento
@@ -57,7 +58,14 @@ const MedicamentoModelo = {
                 if (err) {
                     reject(err)
                 }else{
-                    resolve(results)
+                    tablaIntermedia.getLabMedById(CveMed)
+                    .then(labname => {
+                        const resultWithLabName = { results, labname }
+                        resolve(resultWithLabName)
+                    })
+                    .catch(error => {
+                        reject(error)
+                    })
                 }
             })
         })
@@ -67,13 +75,18 @@ const MedicamentoModelo = {
      * @param {Medicamento} Med - The medicine to create.
      * @returns {Promise<Array<Medicine>>} - A promise that resolves to an array containing the newly created medicine.
      */
-    CreateMedicine: (Med) => {
+    CreateMedicine: (Med,Lab) => {
         return new Promise((resolve,reject) => {
             db.query('INSERT INTO Medicamentos (NomMed,TipoMed,PrecioCmp,PrecioVta,Ganancia,Apmed,RecNec,CompMed, ContMed, Pat_o_Gen) VALUES (?,?,?,?,?,?,?,?,?,?)', Med,(err,results) => {
                 if(err){
                     reject(err)
                 }else{
-                    resolve(results)
+                    try {
+                        tablaIntermedia.CreateIntMedLab(results.insertId,Lab)  
+                        resolve(results)                      
+                    } catch (error) {
+                        reject(error)
+                    }
                 }
             })
         })
@@ -84,25 +97,38 @@ const MedicamentoModelo = {
      * @param {number} CveMed - The ID of the medicine to update.
      * @returns {Promise<Array<Medicine>>} - A promise that resolves to an array containing the updated medicine.
      */
-    UpdateMedicine: (Med,CveMed) => {
+    UpdateMedicine: (Med,CveMed,CveLab) => {
         return new Promise((resolve,reject) => {
             db.query('UPDATE Medicamentos SET NomMed = ?, TipoMed = ?,PrecioCmp=?,PrecioVta=?,Ganancia=?,Apmed=?,RecNec=?,CompMed=?, ContMed=?, Pat_o_Gen=? WHERE CveMed = ?',[Med[0],Med[1],Med[2],Med[3],Med[4],Med[5],Med[6],Med[7],Med[8],Med[9],CveMed],(err,results) => {
                 if(err){
                     reject(err)
                 }else{
-                    resolve(results)
+                    tablaIntermedia.UpdateIntMedLab(CveMed,CveLab)
+                    .then(lab => {
+                        const resultsWithLab = {results,lab}
+                        resolve(resultsWithLab)
+                    })
+                    .catch(error => {
+                        reject(error)
+                    })
                 }
             })
         })
     },
     DeleteMedicine:(CveMed) => {
         return new Promise((resolve,reject) => {
-            db.query('DELETE FROM Medicamentos WHERE CveMed = ?',[CveMed],(err,results) => {
-                if(err){
-                    reject(err)
-                }else{
-                    resolve(results)
-                }
+            tablaIntermedia.DeleteIntMedLab(CveMed)
+            .then(() => {
+                db.query('DELETE FROM Medicamentos WHERE CveMed = ?',[CveMed],(err,results) => {
+                    if(err){
+                        reject(err)
+                    }else{
+                        resolve(results)
+                    }
+                })
+            })
+            .catch(error => {
+                reject(error)
             })
         })
     }

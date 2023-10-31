@@ -25,6 +25,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+console.time()
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/compras', comprasRouter);
@@ -33,5 +34,6 @@ app.use('/lotes',lotesRouter);
 app.use('/laboratorios',laboratoriosRouter);
 app.use('/proveedor',proveedoresRouter);
 app.use('/medicamentos',medicamentosRouter);
+console.timeEnd()
 
 module.exports = app;

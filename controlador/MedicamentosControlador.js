@@ -21,10 +21,11 @@ const NuevoMedicamento = async function (req, res, next) {
             req.body.RecNec,
             req.body.CompMed,
             req.body.ContMed,
-            req.body.Pat_o_Gen
+            req.body.Pat_o_Gen,
         ]
+        const CveLab = req.body.CveLab;
         console.log(medicamento)
-        Medicamento.CreateMedicine(medicamento, (err, result) => {
+        Medicamento.CreateMedicine(medicamento,CveLab, (err, result) => {
             if(err){
                 res.status(500).json({error: err.message});
             } else {
@@ -61,7 +62,10 @@ const ModificarMedicamento = async function (req, res, next) {
             req.body.Pat_o_Gen
         ]
         const medicamentoid = req.params.id;
-        Medicamento.UpdateMedicine(medicamento, medicamentoid, (err, result) => {
+        const CveLab = req.body.CveLab;
+        console.time('UpdateMedicine'); // Start the timer
+        Medicamento.UpdateMedicine(medicamento, medicamentoid,CveLab, (err, result) => {
+            console.timeEnd('UpdateMedicine'); // End the timer
             if(err){
                 res.status(500).json({error: err.message});
             } else {
