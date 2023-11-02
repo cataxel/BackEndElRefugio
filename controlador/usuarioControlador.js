@@ -2,9 +2,13 @@ const { use } = require("../app.js");
 const UserModel = require("../modelo/usuarioModelo.js");
 var Usuarios = require("../modelo/usuarioModelo.js")
 const Joi = require('joi');
-// empleados
-/* GET users listing. */
-//buscar usuario por id
+
+/**
+ * Busca un usuario por su id
+ * @param {Object} req - Objeto de solicitud HTTP
+ * @param {Object} res - Objeto de respuesta HTTP
+ * @param {Function} next - Función para pasar el control al siguiente middleware
+ */
 const BuscarUsuarioId = async function (req, res, next) {
     try {
         const user = await Usuarios.getUserById(req.params.id);
@@ -18,6 +22,13 @@ const BuscarUsuarioId = async function (req, res, next) {
         res.status(500).json({ message: 'Server error' });
     }
 }
+
+/**
+ * Crea un nuevo usuario
+ * @param {Object} req - Objeto de solicitud HTTP
+ * @param {Object} res - Objeto de respuesta HTTP
+ * @param {Function} next - Función para pasar el control al siguiente middleware
+ */
 const CrearUsuario = async function (req, res, next) {
     var User = [
         req.body.NombreEmp,
@@ -38,6 +49,13 @@ const CrearUsuario = async function (req, res, next) {
     })
     
 }
+
+/**
+ * Actualiza un usuario existente
+ * @param {Object} req - Objeto de solicitud HTTP
+ * @param {Object} res - Objeto de respuesta HTTP
+ * @param {Function} next - Función para pasar el control al siguiente middleware
+ */
 const ActualizarUsuario = async function (req, res, next) {
     try {
         var Userpar = [
@@ -61,6 +79,13 @@ const ActualizarUsuario = async function (req, res, next) {
         res.status(500).json({ message: 'Server error' });
     }
 }
+
+/**
+ * Desactiva un usuario existente
+ * @param {Object} req - Objeto de solicitud HTTP
+ * @param {Object} res - Objeto de respuesta HTTP
+ * @param {Function} next - Función para pasar el control al siguiente middleware
+ */
 const DesactivarUsuario = async function (req, res, next) {
     try {
         const Estatus = req.body.Estatus;  // posible error
@@ -75,6 +100,13 @@ const DesactivarUsuario = async function (req, res, next) {
         res.status(500).json({ message: 'Server error' });
     }
 }
+
+/**
+ * Obtiene todos los usuarios
+ * @param {Object} req - Objeto de solicitud HTTP
+ * @param {Object} res - Objeto de respuesta HTTP
+ * @param {Function} next - Función para pasar el control al siguiente middleware
+ */
 const Usuario = async function (req,res,next){
     try{
         const user = await Usuarios.getAllUsers();
@@ -85,6 +117,7 @@ const Usuario = async function (req,res,next){
         res.status(500).json({ message: 'Server error' });
     }
 }
+
 module.exports = {
     Usuario,
     BuscarUsuarioId,

@@ -1,3 +1,7 @@
+/**
+ * This module defines the MedicamentoModelo object, which provides methods for interacting with the Medicamentos table in the database.
+ * @module MedicamentoModelo
+ */
 const { reject } = require('async');
 const db = require('../config/mysql');
 const tablaIntermedia = require('./TablaIntMedLabModelo');

@@ -1,132 +1,135 @@
+// Import the LotesModelo module
 var Lotes = require("../modelo/LotesModelo.js");
-const Joi = require('joi');
 
+/**
+ * Creates a new Lote.
+ * @async
+ * @function NuevoLotes
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Object} The response object with a status code and a message.
+ */
 const NuevoLotes = async function (req, res, next) {
     try {
-        /*
-        const Schema = Joi.object({
-            Existencias: Joi.string().required(),
-            FechaCaducidad: Joi.date().required(),
-            Estatus: Joi.boolean()
-        });
-        const { error, value } = Schema.validate(req.body);
-        if (error) {
-            return res.status(400).json({ message: error.details[0].message });
-        }*/
-        const {
-            ExistenciasFisica,
-            ExistenciasComprada,
-            FechaCaducidad,
-            Estatus,
-            Medicamento,
-            Precio,
-        } = req.body;
-        const newLote = new Lotes({ ExistenciasFisica,
-            ExistenciasComprada, FechaCaducidad, Estatus, Medicamento, Precio });
-        const guardado = await newLote.save();
-        res.status(201).json(guardado);
+        const Lote = [
+            req.body.Montoabo,
+            req.body.Fechacad,
+            req.body.CveMed,
+            req.body.Estatus
+        ]
+        Lotes.CreateLote(Lote, (err, result) => {
+            if(err){
+                res.status(500).json({error: err.message});
+            }else{
+                res.status(201).json({message: 'Lote created succesfully', id: result.insertId});
+            }
+        })     
     } catch (error) {
-        if (error.code === 11000) {
-            res.status(400).json({ message: 'lote ya existe' })
-        } else {
-            console.error(error);
-            res.status(500).json({ message: 'Server error' });
-        }
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
     }
 }
+
+/**
+ * Updates an existing Lote.
+ * @async
+ * @function ModificarLotes
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Object} The response object with a status code and a message.
+ */
 const ModificarLotes = async function (req, res, next) {
     try {
-        /*
-        const Schema = Joi.object({
-            Existencias: Joi.string().required(),
-            FechaCaducidad: Joi.date().required(),
-            Estatus: Joi.boolean()
-        });
-        const { error, value } = Schema.validate(req.body);
-        if (error) {
-            return res.status(400).json({ message: error.details[0].message });
-        }*/
-        const {
-            ExistenciasFisica,
-            FechaCaducidad,
-            Estatus,
-            Medicamento,
-            Precio
-        } = req.body;
+        const Lote = [
+            req.body.Montoabo,
+            req.body.Fechacad,
+            req.body.CveMed,
+            req.body.Estatus
+        ]
         const loteid = req.params.id;
-        const lotes = await Lotes.findOneAndUpdate(
-            { _id: loteid },
-            {
-                ExistenciasFisica,
-                FechaCaducidad,
-                Estatus,
-                Medicamento,
-                Precio,
-            },
-            { new: true, runValidators: true }
-        );
-        if (!lotes) {
-            return res.status(404).json({ message: 'Lotes not found' });
-        }
-        console.log(lotes)
-        res.status(200).json(lotes);
+        Lotes.UpdateLote(Lote, loteid, (err, result) => {
+            if(err){
+                res.status(500).json({error: err.message});
+            }else{
+                res.status(201).json({message:'Lote Updated succesfully', id: result.insertId})
+            }
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
     }
 }
+
+/**
+ * Deactivates an existing Lote.
+ * @async
+ * @function DesactivarLotes
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Object} The response object with a status code and a message.
+ */
 const DesactivarLotes = async function (req, res, next) {
     try {
-        /*
-        const Schema = Joi.object({
-            Estatus: Joi.boolean()
+        const Estatus = req.body.Estatus;
+        const CveLote = req.params.id;
+        Lotes.SetOffLote(CveLote, Estatus, (err, result) => {
+            if(err){
+                res.status(500).json({error: err.message});
+            }else{
+                res.status(201).json({message:'Lote desact succesfully', id: result.insertId})
+            }
         });
-        const { error, value } = Schema.validate(req.body);
-        if (error) {
-            return res.status(400).json({ message: error.details[0].message });
-        }*/
-        const {
-            Estatus
-        } = req.body;
-        const loteid = req.params.id;
-        const lotes = await Lotes.findOneAndUpdate(
-            { _id: loteid },
-            {
-                Estatus
-            },
-            { new: true, runValidators: true }
-        );
-        if (!lotes) {
-            return res.status(404).json({ message: 'Lotes not found' });
-        }
-        console.log(lotes)
-        res.status(200).json(lotes);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
     }
 }
+
+/**
+ * Gets an existing Lote by ID.
+ * @async
+ * @function BuscarLotesId
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Object} The response object with a status code and a message.
+ */
 const BuscarLotesId = async function (req, res, next) {
     try {
-        const lotes = await Lotes.findById(req.params.id);
-        if (!lotes) {
-            return res.status(404).json({ message: 'lotes not found' });
+        const lote  = await Lotes.getLoteById(req.params.id);
+        if(!lote){
+            return res.status(404).json({message: 'Lote not found'});
         }
-        res.status(200).json(lotes);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
-    }
-}
-const TodosLotes = async function (req, res, next) {
-    try {
-        const lote = await Lotes.find();
         res.status(200).json(lote);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
     }
 }
+
+/**
+ * Gets all existing Lotes.
+ * @async
+ * @function TodosLotes
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Object} The response object with a status code and a message.
+ */
+const TodosLotes = async function (req, res, next) {
+    try {
+        const lote = await Lotes.getAllLotes();
+        res.status(200).json(lote);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+}
+
+// Export the functions as an object
 module.exports = {
     NuevoLotes,
     ModificarLotes,

@@ -10,6 +10,6 @@ router.put('/actualizar/:id',controlador.ModificarProveedor);
 // desactivar proveedor
 router.put('/desactivar/:id',controlador.DesactivarProveedor);
 // un provedor por su id
-router.post('/:id',controlador.BuscarProveedorId);
+router.get('/:id',controlador.BuscarProveedorId);
 
 module.exports = router;
