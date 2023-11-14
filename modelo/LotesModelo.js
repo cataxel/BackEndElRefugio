@@ -1,3 +1,4 @@
+const { reject } = require('async');
 const db = require('../config/mysql');
 
 /**
@@ -88,6 +89,23 @@ const LotesModelo = {
                 }
             })
         })
+    },
+    /**
+     * Updates the stock of a specific lot in the database.
+     * @param {string} CveLote - The unique identifier of the lot to update.
+     * @param {number} Cantidad - The amount to add to the current stock of the lot.
+     * @returns {Promise} A Promise that resolves with the results of the update query or rejects with an error.
+     */
+    ActualizarExistenciasC(CveLote,Cantidad){
+        return new Promise((resolve,reject)=>{
+            db.query('UPDATE Lotes SET Montoabo = Montoabo + ? WHERE CveLote = ?',[Cantidad,CveLote],(err,results)=>{
+                if(err){
+                    reject(err);
+                }else{
+                    resolve(results);
+                }
+            });
+        });
     }
 }
 
