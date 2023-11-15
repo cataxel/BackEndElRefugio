@@ -106,6 +106,23 @@ const LotesModelo = {
                 }
             });
         });
+    },
+    /**
+     * Actualiza las existencias de un lote en la base de datos.
+     * @param {string} CveLote - La clave del lote a actualizar.
+     * @param {number} Cantidad - La cantidad de existencias a restar del lote.
+     * @returns {Promise<any>} - Una promesa que resuelve con los resultados de la actualización.
+     */
+    ActualizarExistenciasV(CveLote,Cantidad){
+        return new Promise((resolve,reject)=>{
+            db.query('UPDATE Lotes SET Montoabo = Montoabo - ? WHERE CveLote = ?',[Cantidad,CveLote],(err,results)=>{
+                if(err){
+                    reject(err);
+                }else{
+                    resolve(results);
+                }
+            });
+        });
     }
 }
 

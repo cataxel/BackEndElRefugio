@@ -2,59 +2,25 @@ const Venta = require("../modelo/VentasModelo.js");
 const Joi = require('joi');
 const Lotes = require("../modelo/LotesModelo");
 const NuevoVenta = async function(req,res,next){
-    try {
-        /*
-        const Schema = Joi.object({
-            Iva: Joi.number().required(),
-            SubTotal:Joi.number().required(),
-            Fecha:Joi.date().required(),
-            MetodoPago:Joi.string().required()
+    try{
+        const venta = req.body.venta;
+        const empleado = req.body.Empleado;
+        const Detalles = req.body.DetallesVenta;
 
-        });
-        const { error, value } = Schema.validate(req.body);
-        if (error) {
-            return res.status(400).json({ message: error.details[0].message });
-        }*/
-        const {
-            Fecha,
-            Iva,
-            SubTotal,
-            MetodoPago,
-            CantidadVendida,
-            Lote,
-        } = req.body;
-        const newVenta = new Venta({
-            Fecha,
-            Iva,
-            SubTotal,
-            MetodoPago,
-            CantidadVendida,
-            Lote,
-        });
-        var i = 0
-        for (var Lote1 of Lote) {
-            try{
-                Lote1 = Lote1.Lote
-                cantidadVendida1 = CantidadVendida[i].cantidadVendida1;
-                if(cantidadVendida1 != null) {
-                    await ActualizarExistenciasVenta(Lote1,cantidadVendida1);
-                }
-            }catch (error){
-                console.error(`Error al actualizar existencias para el lote con ID ${Lote1}:`, error.message)
+        Venta.createVenta(venta,empleado,Detalles, (err,result) =>{
+            if(err){
+                res.status(500).json({error: err.message});
+            }else{
+                res.status(200).json({message: 'Venta creada exitosamente'});
             }
-            i++
-        }
-        const guardado = await newVenta.save();
-
-        res.status(201).json(guardado);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
-    }
+        })
+    }catch(err){
+        res.status(500).json({error: err.message});
+    }    
 }
 const BuscarVentaId = async function(req,res,next){
     try {
-        const venta = await Venta.findById(req.params.id);
+        const venta = await Venta.getVentaById(req.params.id);
         if (!venta) {
             return res.status(404).json({ message: 'compra not found' });
         }
@@ -66,7 +32,7 @@ const BuscarVentaId = async function(req,res,next){
 }
 const Ventas = async function(req,res,next){
     try {
-        const venta = await Venta.find();
+        const venta = await Venta.getAllVentas();
         res.status(200).json(venta);
     } catch (error) {
         console.error(error);
