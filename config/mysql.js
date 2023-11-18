@@ -1,11 +1,11 @@
 require('dotenv').config();
 const mysql = require('mysql')
 const connection = mysql.createConnection({
-  host: 'farmadb-do-user-14009899-0.c.db.ondigitalocean.com',
+  host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
-  port: '25060',
+  port: process.env.DB_PORT,
 });
   
   connection.connect(function (error) {
