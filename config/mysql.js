@@ -7,14 +7,12 @@ const connection = mysql.createConnection({
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
   port: process.env.DB_PORT,
-  ssl:{
-    ca: fs.readFileSync(process.env.DB_SSL_CA)
-  }
 });
   
   connection.connect(function (error) {
     if (error) {
       console.log('Error connection database :',error);
+      
       return;
     }
     console.log('Connection established');
