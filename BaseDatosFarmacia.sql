@@ -206,5 +206,63 @@ GRANT Administrador TO 'admin'@'localhost';
 -- activar permisos del rol al usuario admin
 SET default role all to 'admin'@'localhost';
 
+------------------------------------------------------------
+-- Procedimientos almacenados
+------------------------------------------------------------
+
+-- Procedimiento para añadir un nuevo empleado (y crear un usuario de ese empleado con el rol de empleado)
+-- hacer uso de transacciones
+CREATE PROCEDURE addEmpleado(
+	IN nombre varchar(40),
+	IN tel varchar(10),
+	IN puesto varchar(25),
+	IN edad int,
+	IN sexo varchar(1),
+	IN antig int,
+	IN estatus boolean,
+	IN contraseña varchar(256),
+	out idUsuario int,
+	out bandera int(1)
+)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		ROLLBACK;
+		SET bandera = 0;
+	END;
+	DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		ROLLBACK;
+		SET bandera = 0;
+	END;
+	if(select 1 from Empleados where TelEmp = tel) then
+		SET bandera = 0;
+	ELSE
+		START TRANSACTION;
+		INSERT INTO Empleados (NombreEmp, TelEmp, PuestoEmp, EdadEmp, SexoEmp, AntigEmp, Estatus) VALUES (nombre, tel, puesto, edad, sexo, antig, estatus);
+		SET idUsuario = LAST_INSERT_ID();
+		-- usar el nombre de usuario del empleado para crear su usuario
+		set @nombreUsuario = CONCAT((SUBSTRING_INDEX(nombre, ' ', 1)),idUsuario);
+		SET @userHost = CONCAT(@nombreUsuario, '@localhost');
+		SET @createUserQuery = CONCAT('CREATE USER ', @userHost, " IDENTIFIED BY '", contraseña, "'");
+		PREPARE stmt1 FROM @createUserQuery;
+		EXECUTE stmt1;
+		DEALLOCATE PREPARE stmt1;
+		-- Asegúrate de que el rol 'Empleado' exista en tu base de datos
+		SET @grantQuery = CONCAT('GRANT Empleado TO ', @userHost);
+		PREPARE stmt2 FROM @grantQuery;
+		EXECUTE stmt2;
+		DEALLOCATE PREPARE stmt2;
+		SET @defaultRoleQuery = CONCAT('SET DEFAULT ROLE Empleado TO ', @userHost);
+		PREPARE stmt3 FROM @defaultRoleQuery;
+		EXECUTE stmt3;
+		DEALLOCATE PREPARE stmt3;
+		SET bandera = 1;
+		COMMIT;
+	END IF;
+END
+-- eliminar procedimiento
+drop procedure if exists addEmpleado;
+
 
 
