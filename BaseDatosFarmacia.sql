@@ -172,3 +172,38 @@ insert into Prov_Com (CveCom, CveProv) values (1,1);
 
 select NombreEmp from Emp_Ven inner join Empleados on Emp_Ven.CveEmp = Empleados.CveEmp where CveVta = 1;
                    
+-- Creacion de Roles
+CREATE ROLE Administrador;
+CREATE ROLE Empleado;
+
+-- dar privilegios al rol Administrador
+GRANT ALL PRIVILEGES ON FarmaExpress.* TO Administrador;
+-- quitar permisos de eliminacion de tablas al rol Administrador
+REVOKE DROP ON FarmaExpress.* FROM Administrador;
+-- quitar permiso de otorgar o eliminar permisos al rol Administrador
+REVOKE GRANT OPTION ON FarmaExpress.* FROM Administrador;
+
+-- dar privilegios al rol Empleado
+-- permisos de lectura ventas,detalle de ventas,medicamentos,lotes,laboratorios
+-- permisos de escritura en ventas,detalle de ventas,lotes
+GRANT SELECT ON FarmaExpress.Ventas TO Empleado;
+GRANT SELECT ON FarmaExpress.DetVtaMed TO Empleado;
+GRANT SELECT ON FarmaExpress.Medicamentos TO Empleado;
+GRANT SELECT ON FarmaExpress.Lotes TO Empleado;
+GRANT SELECT ON FarmaExpress.Laboratorio TO Empleado;
+GRANT INSERT ON FarmaExpress.Ventas TO Empleado;
+GRANT INSERT ON FarmaExpress.DetVtaMed TO Empleado;
+GRANT INSERT ON FarmaExpress.Lotes TO Empleado;
+
+show grants for Empleado;
+show grants for Administrador;
+
+
+-- Crear usuario administrador
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';
+
+-- asignar el rol de administrador al usuario admin
+GRANT Administrador TO 'admin'@'localhost';
+
+-- activar permisos del rol al usuario admin
+SET default role all to 'admin'@'localhost';
