@@ -180,8 +180,6 @@ CREATE ROLE Empleado;
 GRANT ALL PRIVILEGES ON FarmaExpress.* TO Administrador;
 -- quitar permisos de eliminacion de tablas al rol Administrador
 REVOKE DROP ON FarmaExpress.* FROM Administrador;
--- quitar permiso de otorgar o eliminar permisos al rol Administrador
-REVOKE GRANT OPTION ON FarmaExpress.* FROM Administrador;
 
 -- dar privilegios al rol Empleado
 -- permisos de lectura ventas,detalle de ventas,medicamentos,lotes,laboratorios
@@ -207,3 +205,6 @@ GRANT Administrador TO 'admin'@'localhost';
 
 -- activar permisos del rol al usuario admin
 SET default role all to 'admin'@'localhost';
+
+
+
